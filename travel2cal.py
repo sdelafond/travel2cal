@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+# Sébastien Delafond <sdelafond@gmail.com>
+
 import ConfigParser, email, optparse, os, re, subprocess, sys
 
 DEFAULT_CONFIG_FILE = os.path.join(os.path.dirname(sys.argv[0]),
