@@ -2,6 +2,9 @@
 
 import ConfigParser, email, optparse, os, re, subprocess, sys
 
+DEFAULT_CONFIG_FILE = os.path.join(os.path.dirname(sys.argv[0]),
+                                   "travel2cal.conf")
+
 class Transport:
 
   KEYS = [ 'transportSection', 'cityFrom', 'cityTo', 'class', 'endDate', 'endTime',
@@ -74,7 +77,7 @@ parser.add_option("-s", "--simulate", dest="simulate",
                   action="store_true", default=False,
                   help="Simulation mode")
 parser.add_option("-c", "--config-file", dest="configFile",
-                  default="./config.txt",
+                  default=DEFAULT_CONFIG_FILE,
                   help="Config-file location")
 
 options, args = parser.parse_args(sys.argv[1:])
