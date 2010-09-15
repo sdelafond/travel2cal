@@ -1,8 +1,14 @@
 #!/usr/bin/env python
 
-import email, os, re, subprocess, sys
+import email, optparse, os, re, subprocess, sys
 
 class Transport:
+
+  KEYS = [ 'transportSection', 'cityFrom', 'cityTo', 'class', 'endDate', 'endTime',
+           'from', 'price', 'priceClass', 'reservationCode',
+           'reservationName', 'seat', 'seatType', 'startDate',
+           'startTime', 'to', 'transportId', 'transportType' ]
+  
   def __init__(self, name, regexStr):
     self.name = name
     self.regex = re.compile(regexStr, re.DOTALL | re.UNICODE | re.VERBOSE)
@@ -12,34 +18,47 @@ class Transport:
     m = self.regex.search(str)
     if m:
       self.dict = m.groupdict()
-      if not self.dict['endDate']:
-        self.dict['endDate'] = ""
-      for k in ('startTime', 'endTime'):
-        if k in self.dict:
-          self.dict[k] = self.dict[k].replace('h', ':')
+    self.normalizeDict()
+    
+  def normalizeDict(self):
+    if not self.dict['endDate']:
+      self.dict['endDate'] = ""
 
-  def output(self):
-    s = ". ".join(["%s:%s" % (k, v % self.dict) for k,v in self.format().iteritems()])
-    return s.replace("'", " ").replace('\n', '')
+    for k in ('startTime', 'endTime'):
+      if k in self.dict:
+        self.dict[k] = self.dict[k].replace('h', ':')
+
+    for k in self.dict:
+      self.dict[k] = self.dict[k].replace("'", " ").replace('\n', '')
+      
+  def getGcalQuickAdd(self):
+    d = {}
+    d['What'] = "%(transportType)s %(cityFrom)s - %(cityTo)s"
+    d['When'] = "on %(startDate)s %(startTime)s - %(endTime)s"
+    d['Where'] = "%(from)s -> %(to)s"
+    d['Description'] = "%(reservationCode)s %(reservationName)s ; %(transportType)s %(transportId)s ; Wagon %(transportSection)s Seat %(seat)s (%(seatType)s) ; %(class)s - %(priceClass)s ; %(price)s"
+    l = [ "%s:%s" % (k, v % self.dict)
+          for k,v in d.iteritems() ]
+    return ". ".join(l)
 
 class Sncf(Transport):
+
   REGEX_STR = r'''
-    -+\s+
     TRAIN .+? \s+\|\s+
-    (?P<from>.+?) \s => \s (?P<to>.+?) \s+\|\s+.+?\s\|\s
+    (?P<cityFrom>.+?) \s => \s (?P<cityTo>.+?) \s+\|\s+.+?\s\|\s
     (?P<price>.+?) \s+ -+ \s+
-    D.part \s+ : \s+ (?P<stationFrom>.+?) \s-\s
+    D.part \s+ : \s+ (?P<from>.+?) \s-\s
     (?P<startTime>[\dh]+) \s-\s
     (?P<startDate>[\d/]+) \s
-    Arriv.e \s+ : \s+ (?P<stationTo>.+?) \s-\s
+    Arriv.e \s+ : \s+ (?P<to>.+?) \s-\s
     (?P<endTime>[\dh]+) \s(-\s
     (?P<endDate>[\d/]+) \s)?
-    (?P<trainType>\w+) \s-\s
-    (?P<trainNumber>\d+) \s-\s
+    (?P<transportType>\w+) \s-\s
+    (?P<transportId>\d+) \s-\s
     (?P<class>.+?) \n\s-+\s
     .+?
     (?P<priceClass>.+?) \n\n
-    Voiture \s (?P<car>\d+) \s-\s
+    Voiture \s (?P<transportSection>\d+) \s-\s
     Place \s (?P<seat>\d+) \n
     (?P<seatType>.+?) \n .+?
     dossier \s+ : \s+ (?P<reservationCode>.{6}) \s .+?
@@ -48,22 +67,25 @@ class Sncf(Transport):
   def __init__(self):
     Transport.__init__(self, "SNCF", self.REGEX_STR)
 
-  def format(self):
-    d = {}
-    d['What'] = "%(trainType)s %(from)s - %(to)s"
-    d['When'] = "on %(startDate)s %(startTime)s - %(endTime)s"
-    d['Where'] = "%(stationFrom)s -> %(stationTo)s"
-    d['Description'] = "%(reservationCode)s %(reservationName)s ; %(trainType)s %(trainNumber)s ;Voiture %(car)s Place %(seat)s (%(seatType)s) ; %(class)s - %(priceClass)s ; %(price)s"
-    return d
-  
+
+# main
+parser = optparse.OptionParser()
+parser.add_option("-s", "--simulate", dest="simulate",
+                  action="store_true", default=False,
+                  help="Simulation mode")
+
+options, args = parser.parse_args(sys.argv[1:])
+
 msg = email.message_from_string(sys.stdin.read())
 s = msg.get_payload(decode=True).decode(msg.get_content_charset())
 
 sncf = Sncf()
 sncf.extractDict(s)
 
-command = "google --cal='^Seb$' calendar add '%s'" % sncf.output()
-print command
+print sncf.getGcalQuickAdd()
 
-p = subprocess.Popen(command, shell=True)
-sts = os.waitpid(p.pid, 0)[1]
+if not options.simulate:
+  command = "google --cal='^Seb$' calendar add '%s'" % sncf.getGcalQuickAdd()
+  print "Running %s" % command
+  p = subprocess.Popen(command, shell=True)
+  sts = os.waitpid(p.pid, 0)[1]
