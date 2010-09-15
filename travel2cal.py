@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# coding=utf-8
 
 # Sébastien Delafond <sdelafond@gmail.com>
 
@@ -9,10 +10,11 @@ DEFAULT_CONFIG_FILE = os.path.join(os.path.dirname(sys.argv[0]),
 
 class Transport:
 
-  KEYS = [ 'transportSection', 'cityFrom', 'cityTo', 'class', 'endDate', 'endTime',
+  KEYS = [ 'cityFrom', 'cityTo', 'class', 'endDate', 'endTime',
            'from', 'price', 'priceClass', 'reservationCode',
            'reservationName', 'seat', 'seatType', 'startDate',
-           'startTime', 'to', 'transportId', 'transportType' ]
+           'startTime', 'to', 'transportId', 'transportSection',
+           'transportType' ]
   
   def __init__(self, name, regexStr):
     self.name = name
@@ -26,8 +28,9 @@ class Transport:
     self.normalizeDict()
     
   def normalizeDict(self):
-    if not self.dict['endDate']:
-      self.dict['endDate'] = ""
+    for k in self.KEYS:
+      if not k in self.dict or not self.dict[k]:
+        self.dict[k] = ""
 
     for k in ('startTime', 'endTime'):
       if k in self.dict:
