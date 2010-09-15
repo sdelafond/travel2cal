@@ -16,9 +16,9 @@ class Transport:
            'startTime', 'to', 'transportId', 'transportSection',
            'transportType' ]
   
-  def __init__(self, name, regexStr):
-    self.name = name
-    self.regex = re.compile(regexStr, re.DOTALL | re.UNICODE | re.VERBOSE)
+  def __init__(self):
+    self.regex = re.compile(self.REGEX_STR,
+                            re.DOTALL | re.UNICODE | re.VERBOSE)
     self.dict = {}
     
   def extractDict(self, str):
@@ -37,7 +37,7 @@ class Transport:
         self.dict[k] = self.dict[k].replace('h', ':')
 
     for k in self.dict:
-      self.dict[k] = self.dict[k].replace("'", " ").replace('\n', '')
+      self.dict[k] = self.dict[k].replace("'", " ").replace('\n', ' ')
       
   def getGcalQuickAdd(self):
     d = {}
@@ -50,6 +50,8 @@ class Transport:
     return ". ".join(l)
 
 class Sncf(Transport):
+
+  NAME = "SNCF"
 
   REGEX_STR = r'''
     TRAIN .+? \s+\|\s+
@@ -73,7 +75,7 @@ class Sncf(Transport):
     associ. \s+ : \s+ (?P<reservationName>.+?) \s'''
 
   def __init__(self):
-    Transport.__init__(self, "SNCF", self.REGEX_STR)
+    Transport.__init__(self)
 
 
 # main
