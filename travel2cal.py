@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import email, optparse, os, re, subprocess, sys
+import ConfigParser, email, optparse, os, re, subprocess, sys
 
 class Transport:
 
@@ -73,6 +73,9 @@ parser = optparse.OptionParser()
 parser.add_option("-s", "--simulate", dest="simulate",
                   action="store_true", default=False,
                   help="Simulation mode")
+parser.add_option("-c", "--config-file", dest="configFile",
+                  default="./config.txt",
+                  help="Config-file location")
 
 options, args = parser.parse_args(sys.argv[1:])
 
@@ -84,8 +87,17 @@ sncf.extractDict(s)
 
 print sncf.getGcalQuickAdd()
 
-if not options.simulate:
-  command = "google --cal='^Seb$' calendar add '%s'" % sncf.getGcalQuickAdd()
-  print "Running %s" % command
+config = ConfigParser.RawConfigParser()
+config.read(options.configFile)
+
+calendar = config.get('gcal', 'name')
+      
+command = "google --cal='^%s$' calendar add '%s'" % (calendar,
+                                                     sncf.getGcalQuickAdd())
+
+if options.simulate:
+  print "Would run:\n\t %s" % command
+else:
+  print "Running:\n\t %s" % command
   p = subprocess.Popen(command, shell=True)
   sts = os.waitpid(p.pid, 0)[1]
