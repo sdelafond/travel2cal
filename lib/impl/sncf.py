@@ -19,7 +19,7 @@ class Sncf(Trip):
     \s+\|\s+.+?\s\|\s
     (?P<price>.+?)
     \s+ -+ \s+ 
-    .+? # all the legs for that trip
+    (?P<sub>.+?) # all the legs for that trip
     dossier \s+ : \s+ (?P<reservationCode>.{6}) \s .+?
     associ. \s+ : \s+ (?P<reservationName>.+?) \s)'''
 
@@ -37,4 +37,4 @@ class Sncf(Trip):
     (?P<priceClass>.+?) \n\n
     Voiture \s (?P<transportSection>\d+) \s-\s
     Place \s (?P<seat>\d+) \n
-    (?P<seatType>.+?) \n .+?'''
+    (?P<seatType>.+?)'''

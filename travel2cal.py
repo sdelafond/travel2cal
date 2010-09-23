@@ -6,6 +6,7 @@
 import ConfigParser, email, optparse, os, subprocess, sys
 
 from lib.api.travel import TripFactory
+from lib.api.stay import StayFactory
 import lib.impl
 
 DEFAULT_CONFIG_FILE = os.path.join(os.path.dirname(sys.argv[0]),
@@ -51,7 +52,10 @@ for part in msg.walk():
     except:
       continue
 
-for trip in TripFactory(myType).parse(s):
+s = s.replace('\r\n', '\n')
+
+# FIXME: stay factory vs. trip factory
+for trip in myType.getFactory(myType).parse(s):
   for exp in trip.export(options.format):
     command = "google --cal='^%s$' calendar add '%s'" % (calendar, exp)
 

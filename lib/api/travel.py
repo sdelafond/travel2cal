@@ -43,6 +43,10 @@ class Trip:
     except AttributeError:
       raise Exception("format '%s' does not exist." % format.lower())
 
+  @staticmethod
+  def getFactory(clsName):
+    return TripFactory(clsName)
+
 class TripFactory:
   def __init__(self, clsName):
     self.clsName = clsName
@@ -57,7 +61,7 @@ class TripFactory:
       m = self.tripRegex.search(s)
       if m:
         trip = Trip(self.__normalizeDict(m.groupdict(), Trip.KEYS))
-        for m2 in self.legRegex.finditer(s):
+        for m2 in self.legRegex.finditer(trip.tripDict['sub']):
           d = self.__normalizeDict(m2.groupdict(), Leg.KEYS)
           trip.addLeg(Leg(d))
         trips.append(trip)
@@ -71,7 +75,8 @@ class TripFactory:
       if k in d:
         d[k] = d[k].replace('h', ':') # needed by gcal
     for k in d:
-      d[k] = re.sub(r"['\n]", ' ', d[k])
-      d[k] = re.sub(r'(<.+?>|&\w+?;)', '', d[k]) # crude unhtml
+      if not k == 'sub':
+        d[k] = re.sub(r"['\n]", ' ', d[k])
+        d[k] = re.sub(r'(<.+?>|&\w+?;)', '', d[k]) # crude unhtml
 
     return d
