@@ -3,7 +3,7 @@
 
 # Sébastien Delafond <sdelafond@gmail.com>
 
-import ConfigParser, email, optparse, os, subprocess, sys
+import ConfigParser, email, optparse, os, re, subprocess, sys
 
 import lib.impl
 
@@ -44,11 +44,18 @@ for part in msg.walk():
     continue
   else:
     s = None
-    try:
-      s = part.get_payload(decode=True).decode(msg.get_content_charset() or part.get_charset() or part.get_content_charset())
-      break # stop on 1st payload successfully decoded
-    except:
-      continue
+    payload = part.get_payload(decode=True)
+    charset = msg.get_content_charset() or part.get_charset() or part.get_content_charset()
+    if charset:
+      s = payload.decode(charset)
+    else:
+      for charset in [ 'ascii', 'iso-8859-15', 'utf-8' ]:
+        try:
+          s = payload.decode(charset)
+        except:
+          continue
+      if s:
+        break # stop on 1st payload successfully decoded
 
 s = s.replace('\r\n', '\n')
 

@@ -19,6 +19,6 @@ class Night(Sub):
 class Stay(Main):
   KEYS = [ 'address', 'city', 'zipCode', 'phone', 'fax', 'email', 'website',
            'class', 'endDate', 'priceClass', 'startDate', 'roomType', 'price',
-           'totalPrice', 'prePaid', 'reference' ]
+           'totalPrice', 'prePaid', 'reference', 'fee', 'bedType' ]
 
   SUB = Night
