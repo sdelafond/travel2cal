@@ -28,7 +28,7 @@ parser.add_option("-f", "--format", dest="format",
                   help="output format style (available styles are : 'gcal'")
 parser.add_option("-t", "--type", dest="type",
                   default=DEFAULT_TYPE,
-                  help="transport/stay type (available type are : 'sncf'")
+                  help="transport/stay type (available type are : 'sncf, shb'")
 
 options, args = parser.parse_args(sys.argv[1:])
 
@@ -39,7 +39,17 @@ calendar = config.get('gcal', 'name')
 myType = getattr(lib.impl, options.type.capitalize())
 
 msg = email.message_from_string(sys.stdin.read())
-s = msg.get_payload(decode=True).decode(msg.get_content_charset())
+for part in msg.walk():
+  # multipart/* are just containers
+  if part.get_content_maintype() == 'multipart':
+    continue
+  else:
+    s = None
+    try:
+      s = part.get_payload(decode=True).decode(msg.get_content_charset() or part.get_charset() or part.get_content_charset())
+      break # stop on 1st payload successfully decoded
+    except:
+      continue
 
 for trip in TripFactory(myType).parse(s):
   for exp in trip.export(options.format):
