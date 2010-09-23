@@ -12,7 +12,7 @@ DEFAULT_CONFIG_FILE = os.path.join(os.path.dirname(sys.argv[0]),
 
 DEFAULT_FORMAT = "gcal"
 
-DEFAULT_TYPE = "sncf"
+TYPES = [ t.lower() for t in lib.impl.__all__ ]
 
 # main
 parser = optparse.OptionParser()
@@ -26,16 +26,14 @@ parser.add_option("-f", "--format", dest="format",
                   default=DEFAULT_FORMAT,
                   help="output format style (available styles are : 'gcal'")
 parser.add_option("-t", "--type", dest="type",
-                  default=DEFAULT_TYPE,
-                  help="transport/stay type (available type are : 'sncf, shb'")
+                  default=None,
+                  help="trip/stay type (available type are : %s" % (TYPES,))
 
 options, args = parser.parse_args(sys.argv[1:])
 
 config = ConfigParser.RawConfigParser()
 config.read(options.configFile)
 calendar = config.get('gcal', 'name')
-
-myType = getattr(lib.impl, options.type.capitalize())
 
 msg = email.message_from_string(sys.stdin.read())
 for part in msg.walk():
@@ -59,16 +57,19 @@ for part in msg.walk():
 
 s = s.replace('\r\n', '\n')
 
-# FIXME: stay factory vs. trip factory
-for trip in myType.getFactory(myType).parse(s):
-  for exp in trip.export(options.format):
-    command = "google --cal='^%s$' calendar add '%s'" % (calendar, exp)
+if options.type:
+  types = [options.type, ]
+else:
+  types = TYPES
 
-    if options.simulate:
-      print "Would run:\n\t %s" % command
-    else:
-      print "Running:\n\t %s" % command
-      p = subprocess.Popen(command, shell=True)
-      sts = os.waitpid(p.pid, 0)[1]
+for myType in [ getattr(lib.impl, t.capitalize()) for t in types ]:
+  for trip in myType.getFactory(myType).parse(s):
+    for exp in trip.export(options.format):
+      command = "google --cal='^%s$' calendar add '%s'" % (calendar, exp)
 
-    print
+      if options.simulate:
+        print "Would run:\n\t %s" % command
+      else:
+        print "Running:\n\t %s" % command
+        p = subprocess.Popen(command, shell=True)
+        sts = os.waitpid(p.pid, 0)[1]
