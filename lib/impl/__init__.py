@@ -2,4 +2,6 @@
 
 # Sébastien Delafond <sdelafond@gmail.com>
 
-__all__ = [ 'sncf' ]
+from sncf import Sncf
+
+__all__ = [ 'Sncf' ]
