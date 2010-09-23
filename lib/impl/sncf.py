@@ -2,7 +2,7 @@
 
 # Sébastien Delafond <sdelafond@gmail.com>
 
-from lib.api.travel import Trip
+from lib.api.trip import Trip
 
 class Sncf(Trip):
 
