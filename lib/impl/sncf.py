@@ -12,7 +12,7 @@ class Sncf(Trip):
   # all the specs of its legs.
   # Note that the surrounding parenthesis are important, since we both
   # split *and* search using that same regex.
-  TRIP_REGEX_STR = r'''
+  MAIN_REGEX_STR = r'''
     (TRAIN (?P<roundTrip>.+?)
     \s+\|\s+
     (?P<cityFrom>.+?) \s <?=> \s (?P<cityTo>.+?)
@@ -23,7 +23,7 @@ class Sncf(Trip):
     dossier \s+ : \s+ (?P<reservationCode>.{6}) \s .+?
     associ. \s+ : \s+ (?P<reservationName>.+?) \s)'''
 
-  LEG_REGEX_STR = r'''
+  SUB_REGEX_STR = r'''
     D.part \s+ : \s+ (?P<from>.+?) \s-\s
     (?P<startTime>[\dh]+) \s-\s
     (?P<startDate>[\d/]+) \s

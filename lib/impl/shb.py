@@ -12,7 +12,7 @@ class Shb(Stay):
   # all the specs of its nights.
   # Note that the surrounding parenthesis are important, since we both
   # split *and* search using that same regex.
-  STAY_REGEX_STR = r'''
+  MAIN_REGEX_STR = r'''
     (Confirmation \s de \s r.servation \s - \s 
      R.f.rence \s : \s (?P<reference>.+?) \s - .+?
      R.servation: \s (?P<hotelName>.+?) \n
@@ -41,7 +41,7 @@ class Shb(Stay):
      .+?
      Si \s vous \s devez \s annuler)'''
 
-  NIGHT_REGEX_STR = r'''
+  SUB_REGEX_STR = r'''
     \s*
     (?P<date>.+?): \s+
     (?P<price>[^\s]+)'''

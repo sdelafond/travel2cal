@@ -5,8 +5,6 @@
 
 import ConfigParser, email, optparse, os, subprocess, sys
 
-from lib.api.travel import TripFactory
-from lib.api.stay import StayFactory
 import lib.impl
 
 DEFAULT_CONFIG_FILE = os.path.join(os.path.dirname(sys.argv[0]),
