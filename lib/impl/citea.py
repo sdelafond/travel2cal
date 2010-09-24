@@ -30,7 +30,7 @@ class Citea(Stay):
      Room \s Type: \s+ (?P<roomType>.+?) \s+
      Type \s of \s bed: \s+ (?P<bedType>.+?) \n
      .+?
-     Arrival \s Date: \s+ (?P<startDate>.+?) \n
+     Arrival \s Date: \s+ (?P<startDate>.+?,.+?), \s (?P<startTime>.+?) \n
      Departure \s Date: \s+ (?P<endDate>.+?) \n
      Stay: \s+ (?P<duration>.+?) \s+
      Pricing
@@ -38,6 +38,5 @@ class Citea(Stay):
      nice \s stay)'''
 
   SUB_REGEX_STR = r'''
-    \s*
-    (?P<date>.+?): \s+
+    \s* : \s
     (?P<price>[^\s]+)'''

@@ -51,7 +51,7 @@ for part in msg.walk():
         try:
           s = payload.decode(charset)
         except:
-          raise
+          pass
     if s:
       break # stop on 1st payload successfully decoded
 

@@ -42,6 +42,8 @@ class Shb(Stay):
      Si \s vous \s devez \s annuler)'''
 
   SUB_REGEX_STR = r'''
-    \s*
-    (?P<date>.+?): \s+
+    \s* : \s
     (?P<price>[^\s]+)'''
+
+  TIMESTAMP_FORMAT = '%A %d %B %Y'
+  TIMESTAMP_LOCALE = 'fr_FR'
