@@ -51,11 +51,12 @@ for part in msg.walk():
         try:
           s = payload.decode(charset)
         except:
-          continue
-      if s:
-        break # stop on 1st payload successfully decoded
+          raise
+    if s:
+      break # stop on 1st payload successfully decoded
 
 s = s.replace('\r\n', '\n')
+#print s.encode('utf-8')
 
 if options.type:
   types = [options.type, ]
