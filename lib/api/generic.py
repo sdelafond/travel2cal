@@ -43,6 +43,8 @@ class Sub:
         raise Exception("No supported locale found to match '%s'" % self.cls.TIMESTAMP_LOCALE)
 
       for key in ('startDate', 'endDate'):
+        if not di[key]:
+          continue
         locale.setlocale(locale.LC_ALL, loc)
         ts = datetime.strptime(di[key], self.cls.TIMESTAMP_FORMAT)
         locale.setlocale(locale.LC_ALL, oldLocale)

@@ -38,3 +38,6 @@ class Sncf(Trip):
     Voiture \s (?P<transportSection>\d+) \s-\s
     Place \s (?P<seat>\d+) \n
     (?P<seatType>.+?)'''
+
+  TIMESTAMP_FORMAT = '%d/%m/%Y'
+  TIMESTAMP_LOCALE = 'fr_FR'
