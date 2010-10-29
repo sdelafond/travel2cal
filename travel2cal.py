@@ -44,7 +44,15 @@ for part in msg.walk():
   else:
     s = None
     payload = part.get_payload(decode=True)
-    charset = msg.get_content_charset() or part.get_charset() or part.get_content_charset()
+    if part.get_content_type() == 'text/html':
+      p1 = subprocess.Popen(["echo", "'%s'" % payload],
+                            stdout=subprocess.PIPE)
+      payload = subprocess.Popen(ppCommand.split(" "),
+                                 stdin=p1.stdout,
+                                 stdout=subprocess.PIPE).communicate()[0]
+
+    charset =  part.get_content_charset() or part.get_charset() or msg.get_content_charset()
+
     if charset:
       s = payload.decode(charset)
     else:
@@ -57,10 +65,6 @@ for part in msg.walk():
       break # stop on 1st payload successfully decoded
 
 s = s.replace('\r\n', '\n')
-p1 = subprocess.Popen(["echo", "'%s'" % s], stdout=subprocess.PIPE)
-s = subprocess.Popen(ppCommand.split(" "), stdin=p1.stdout, stdout=subprocess.PIPE).communicate()[0]
-s = s.decode(charset)
-#print s
 
 if options.type:
   types = [options.type, ]
