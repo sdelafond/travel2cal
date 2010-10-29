@@ -34,7 +34,6 @@ options, args = parser.parse_args(sys.argv[1:])
 config = ConfigParser.RawConfigParser()
 config.read(options.configFile)
 calendar = config.get('gcal', 'name')
-ppCommand = config.get('preprocess', 'command')
 
 msg = email.message_from_string(sys.stdin.read())
 for part in msg.walk():
@@ -44,7 +43,8 @@ for part in msg.walk():
   else:
     s = None
     payload = part.get_payload(decode=True)
-    if part.get_content_type() == 'text/html':
+    ppCommand = config.get('preprocess', part.get_content_type())
+    if ppCommand:
       p1 = subprocess.Popen(["echo", "'%s'" % payload],
                             stdout=subprocess.PIPE)
       payload = subprocess.Popen(ppCommand.split(" "),
