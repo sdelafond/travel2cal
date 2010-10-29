@@ -14,8 +14,8 @@ class Accor(Stay):
   # split *and* search using that same regex.
   MAIN_REGEX_STR = r'''
     (Num.ro \s de \s r.servation \s+ (?P<reference>[^\s]+)
-    .+?
-     \[\d\](?P<hotelName>[^\n]+) \n\s*
+     .+?
+     \[\d\](?P<hotelName>[^\n]+) .+?
      T.l \s : \s (?P<phone>.+?) \n\s*
      (?P<address>.+?) \s - \s (?P<zipCode>\d+) \s (?P<city>.+?) \s\s .*? \n\s*
      .+?
