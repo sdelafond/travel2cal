@@ -43,13 +43,16 @@ for part in msg.walk():
   else:
     s = None
     payload = part.get_payload(decode=True)
-    ppCommand = config.get('preprocess', part.get_content_type())
-    if ppCommand:
+    try:
+      ppCommand = config.get('preprocess', part.get_content_type())
       p1 = subprocess.Popen(["echo", "'%s'" % payload],
                             stdout=subprocess.PIPE)
       payload = subprocess.Popen(ppCommand.split(" "),
                                  stdin=p1.stdout,
                                  stdout=subprocess.PIPE).communicate()[0]
+    except ConfigParser.NoOptionError:
+      # no pre-processing for this MIME type
+      pass
 
     charset =  part.get_content_charset() or part.get_charset() or msg.get_content_charset()
 
