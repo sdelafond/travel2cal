@@ -30,7 +30,7 @@ class Sncf(Trip):
     Arriv.e \s+ : \s+ (?P<to>.+?) \s-\s
     (?P<endTime>[\dh]+) \s(-\s
     (?P<endDate>[\d/]+) \s)?
-    (?P<transportType>\w+) \s-\s
+    (?P<transportType>[^-]+) \s-\s
     (?P<transportId>\d+) \s-\s
     (?P<class>.+?) \n\s-+\s
     .+?
