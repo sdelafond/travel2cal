@@ -13,17 +13,17 @@ class Accor(Stay):
   # Note that the surrounding parenthesis are important, since we both
   # split *and* search using that same regex.
   MAIN_REGEX_STR = r'''
-    (Num.ro \s de \s r.servation \s+ (?P<reference>[^\s]+)
+     ((Num.ro \s de \s r.servation|Reservation \s number) \s+ (?P<reference>[^\s]+)
      .+? \n\n\s*
      \[\d\](?P<hotelName>[^\n]+) .+?
      T.l \s : \s (?P<phone>.+?) \n\s*
      (?P<address>.+?) \s - \s (?P<zipCode>\d+) \s (?P<city>.+?) \s\s .*? \n\s*
      .+?
-     Du \s (?P<startDate>[^\s]+) \s au \s (?P<endDate>[^\s]+), .+? soit \s (?P<duration>.+?) \s nuit\(s\)
+     (Du|from) \s (?P<startDate>[^\s]+) \s (au|to) \s (?P<endDate>[^\s]+), .+? (soit|i\.e\.) \s (?P<duration>.+?) \s (night|nuit)\(s\)
      .+?
      (?P<totalPrice>[\d\.]+ \s EUR) \n\s+
      .+?
-     (?P<roomType>Chambre \s pour \s .+?) \n\s+
+     (?P<roomType>(Chambre|Room) \s (pour|for) \s .+?) \n\s+
      (?P<sub>.+?) # all the nights for that stay
      A-Club)'''
 
