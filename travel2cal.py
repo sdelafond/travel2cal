@@ -40,32 +40,32 @@ for part in msg.walk():
   # multipart/* are just containers
   if part.get_content_maintype() == 'multipart':
     continue
+
+  s = None
+  payload = part.get_payload(decode=True)
+  try:
+    ppCommand = config.get('preprocess', part.get_content_type())
+    p1 = subprocess.Popen(["echo", "'%s'" % payload],
+                          stdout=subprocess.PIPE)
+    payload = subprocess.Popen(ppCommand.split(" "),
+                               stdin=p1.stdout,
+                               stdout=subprocess.PIPE).communicate()[0]
+  except ConfigParser.NoOptionError:
+    # no pre-processing for this MIME type
+    pass
+
+  charset =  part.get_content_charset() or part.get_charset() or msg.get_content_charset()
+
+  if charset:
+    s = payload.decode(charset)
   else:
-    s = None
-    payload = part.get_payload(decode=True)
-    try:
-      ppCommand = config.get('preprocess', part.get_content_type())
-      p1 = subprocess.Popen(["echo", "'%s'" % payload],
-                            stdout=subprocess.PIPE)
-      payload = subprocess.Popen(ppCommand.split(" "),
-                                 stdin=p1.stdout,
-                                 stdout=subprocess.PIPE).communicate()[0]
-    except ConfigParser.NoOptionError:
-      # no pre-processing for this MIME type
-      pass
-
-    charset =  part.get_content_charset() or part.get_charset() or msg.get_content_charset()
-
-    if charset:
-      s = payload.decode(charset)
-    else:
-      for charset in [ 'ascii', 'iso-8859-15', 'utf-8' ]:
-        try:
-          s = payload.decode(charset)
-        except:
-          pass
-    if s:
-      break # stop on 1st payload successfully decoded
+    for charset in [ 'ascii', 'iso-8859-15', 'utf-8' ]:
+      try:
+        s = payload.decode(charset)
+      except:
+        pass
+  if s:
+    break # stop on 1st payload successfully decoded
 
 s = s.replace('\r\n', '\n')
 
