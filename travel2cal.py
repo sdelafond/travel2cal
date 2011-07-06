@@ -28,12 +28,17 @@ parser.add_option("-f", "--format", dest="format",
 parser.add_option("-t", "--type", dest="type",
                   default=None,
                   help="trip/stay type (available type are : %s" % (TYPES,))
+parser.add_option("-n", "--name", dest="name",
+                  default=None,
+                  help="calendar name")
 
 options, args = parser.parse_args(sys.argv[1:])
 
 config = ConfigParser.RawConfigParser()
 config.read(options.configFile)
-calendar = config.get('gcal', 'name')
+calendar = options.name
+if not calendar:
+  calendar = config.get('gcal', 'name')
 
 msg = email.message_from_string(sys.stdin.read())
 for part in msg.walk():
