@@ -43,7 +43,7 @@ class Sub:
         raise Exception("No supported locale found to match '%s'" % self.cls.TIMESTAMP_LOCALE)
 
       for key in ('startDate', 'endDate'):
-        if not di[key]:
+        if not di.get(key):
           continue
         locale.setlocale(locale.LC_ALL, loc)
         ts = datetime.strptime(di[key], self.cls.TIMESTAMP_FORMAT)
@@ -107,12 +107,14 @@ class MainFactory:
     for s in self.mainRegex.split(str):
       m = self.mainRegex.search(s)
       if m:
+        main = self.clsName(m.groupdict())
         if simulate:
           print "match for main regex"
-        main = self.clsName(m.groupdict())
+          print main.di
         for m2 in self.subRegex.finditer(main.di['sub']):
+          main.addSub(m2.groupdict())
           if simulate:
             print "match for subregex"
-          main.addSub(m2.groupdict())
+            print m2.groupdict()
         mains.append(main)
     return mains

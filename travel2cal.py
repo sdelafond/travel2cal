@@ -93,7 +93,7 @@ else:
 for myType in [ getattr(lib.impl, t.capitalize()) for t in types ]:
   if options.simulate:
     print "trying type: %s" % myType
-  for trip in myType.getFactory(myType).parse(s):
+  for trip in myType.getFactory(myType).parse(s, options.simulate):
     for exp in trip.export(options.format):
       command = "google --cal='^%s$' calendar add '%s'" % (calendar, exp)
 
