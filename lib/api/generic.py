@@ -102,13 +102,17 @@ class MainFactory:
     self.subRegex = re.compile(self.clsName.SUB_REGEX_STR,
                                re.DOTALL | re.UNICODE | re.VERBOSE)
 
-  def parse(self, str):
+  def parse(self, str, simulate):
     mains = []
     for s in self.mainRegex.split(str):
       m = self.mainRegex.search(s)
       if m:
+        if simulate:
+          print "match for main regex"
         main = self.clsName(m.groupdict())
         for m2 in self.subRegex.finditer(main.di['sub']):
+          if simulate:
+            print "match for subregex"
           main.addSub(m2.groupdict())
         mains.append(main)
     return mains

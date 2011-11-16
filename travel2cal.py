@@ -57,22 +57,33 @@ for part in msg.walk():
                                stdout=subprocess.PIPE).communicate()[0]
   except ConfigParser.NoOptionError:
     # no pre-processing for this MIME type
+    if options.simulate:
+      print "no preprocessing"
     pass
 
   charset =  part.get_content_charset() or part.get_charset() or msg.get_content_charset()
 
   if charset:
+    if options.simulate:
+      print "charset found: %s" % charset
     s = payload.decode(charset)
   else:
     for charset in [ 'ascii', 'iso-8859-15', 'utf-8' ]:
       try:
+        if options.simulate:
+          print "now trying charset: %s" % charset
         s = payload.decode(charset)
       except:
         pass
   if s:
+    if options.simulate:
+      print "decoding ok"
     break # stop on 1st payload successfully decoded
 
 s = s.replace('\r\n', '\n')
+
+if options.simulate:
+  print s
 
 if options.type:
   types = [options.type, ]
@@ -80,6 +91,8 @@ else:
   types = TYPES
 
 for myType in [ getattr(lib.impl, t.capitalize()) for t in types ]:
+  if options.simulate:
+    print "trying type: %s" % myType
   for trip in myType.getFactory(myType).parse(s):
     for exp in trip.export(options.format):
       command = "google --cal='^%s$' calendar add '%s'" % (calendar, exp)
