@@ -16,9 +16,9 @@ class Capitainetrain(Trip):
     (Vos \s billets \s command.s
     \s+ .+?
     \s+ de \s la \s commande \s est \s (?P<price>.+?)\.
-    \s+ .+? votre \s e-billet \s est \s (?P<reservationCode>.{6})
-    \s / \s
-    (?P<reservationName>.+?)\.
+    \s+ .+? (?:votre|vos) \s e-billets? \s (?:est|sont) \s (?P<reservationCode>[^.]+)
+    \. \s
+#    (?P<reservationName>.+?)\.
     (?P<sub>.+?) # all the legs for that trip
     Conditions
     )'''
