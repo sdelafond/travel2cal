@@ -46,7 +46,7 @@ class Sub:
         if not di.get(key):
           continue
         locale.setlocale(locale.LC_ALL, loc)
-        ts = datetime.strptime(di[key], self.cls.TIMESTAMP_FORMAT)
+        ts = datetime.strptime(di[key].encode('utf-8'), self.cls.TIMESTAMP_FORMAT)
         locale.setlocale(locale.LC_ALL, oldLocale)
         di[key] = datetime.strftime(ts, '%d %b %Y')
 
