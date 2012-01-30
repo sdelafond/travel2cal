@@ -13,12 +13,12 @@ class Capitainetrain(Trip):
   # Note that the surrounding parenthesis are important, since we both
   # split *and* search using that same regex.
   MAIN_REGEX_STR = r'''
-    (Vos \s billets \s command.s
+    (Vo(?:tre)?s? \s billets? \s command.s?
     \s+ .+?
     \s+ de \s la \s commande \s est \s (?P<price>.+?)\.
-    \s+ .+? (?:votre|vos) \s e-billets? \s (?:est|sont) \s (?P<reservationCode>[^.]+)
-    \. \s
-#    (?P<reservationName>.+?)\.
+    \s+ .+? Num.ro \s de \s dossier \s : \s (?P<reservationCode>[^.]+)
+    \s / \s
+    (?P<reservationName>\w+)
     (?P<sub>.+?) # all the legs for that trip
     Conditions
     )'''
