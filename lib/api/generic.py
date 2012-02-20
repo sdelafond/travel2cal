@@ -105,6 +105,8 @@ class MainFactory:
   def parse(self, str, simulate):
     mains = []
     for s in self.mainRegex.split(str):
+      if not s:
+        s = ""
       m = self.mainRegex.search(s)
       if m:
         main = self.clsName(m.groupdict())

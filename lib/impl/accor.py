@@ -13,22 +13,25 @@ class Accor(Stay):
   # Note that the surrounding parenthesis are important, since we both
   # split *and* search using that same regex.
   MAIN_REGEX_STR = r'''
-     ((Num..?ro \s de \s r..?servation|Reservation \s number) \s+ (?P<reference>[^\s]+)
-     .+? permettent\. [^\[]+
+     ((Num..?ro \s de \s r..?servation|Reservation \s number) \s+ : \s+ (?P<reference>[^\s]+)
+     .+? Conservez .+?
      \[\d\](?P<hotelName>[^\n]+) .+?
      T..?l \s : \s (?P<phone>.+?) \n\s*
      (?P<address>.+?) \s - \s (?P<zipCode>\d+) \s (?P<city>.+?) \s\s .*? \n\s*
      .+?
      (Du|du|from) \s (?P<startDate>[^\s]+) \s (au|to) \s (?P<endDate>[^\s]+) \s? , .+? (soit|i\.e\.) \s (?P<duration>.+?) \s (night|nuit)\(s\)
      .+?
-     (?P<totalPrice>[\d\.]+ \s EUR) \n\s+
-     .+?
      (?P<roomType>(Chambre|Room) \s (pour|for) \s .+?) \n\s+
      (?P<sub>.+?) # all the nights for that stay
+     .+?
+     Montant \s total
+     .+?
+     Montant \s Total \s TTC \s+ (?P<totalPrice>[\d\.]+ \s EUR) \n
+     (?:.+?Montant \s pr..?pay..? \s+ (?P<prePaid>[\d\.]+ \s EUR) \n)?
+     .+?
      Important)'''
 
-  SUB_REGEX_STR = r'''
-    (?P<price>.+?)'''
+  SUB_REGEX_STR = r''' \w '''
 
   TIMESTAMP_FORMAT = '%d/%m/%Y'
   TIMESTAMP_LOCALE = 'fr_FR'
