@@ -90,6 +90,7 @@ if options.type:
 else:
   types = TYPES
 
+rc = 0
 for myType in [ getattr(lib.impl, t.capitalize()) for t in types ]:
   if options.simulate:
     print "trying type: %s" % myType
@@ -99,11 +100,9 @@ for myType in [ getattr(lib.impl, t.capitalize()) for t in types ]:
 
       if options.simulate:
         print "Would run:\n\t %s" % command
-        rc = 0
       else:
         print "Running:\n\t %s" % command
         p = subprocess.Popen(command, shell=True)
-        rc = os.waitpid(p.pid, 0)[1]
-      sys.exit(rc)
+        rc += os.waitpid(p.pid, 0)[1]
 
-sys.exit(1)
+sys.exit(rc)
