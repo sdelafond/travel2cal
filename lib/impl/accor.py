@@ -17,9 +17,9 @@ class Accor(Stay):
      .+? Conservez .+?
      \s\s \[\d\](?P<hotelName>[^\n]+) .+?
      T..?l \s : \s (?P<phone>[^\s]+) \s*
-     (?P<address>.+?) \s - \s (?P<zipCode>\d+) \s (?P<city>.+?) \s \[.*? \n\s*
+     (?P<address>.+?) \s - \s (?P<zipCode>\d+) \s \[.*? \n\s* (?P<city>[^\n]+)
      .+?
-     (Du|du|from) \s (?P<startDate>[^\s]+) \s (au|to) \s (?P<endDate>[^\s]+) \s? , .+? (soit|i\.e\.) \s (?P<duration>.+?) \s (night|nuit)\(s\)
+     (Du|du|from) \s (?P<startDate>[0-9/]+) \s (au|to) \s (?P<endDate>[0-9/]+) \s? , .+? (soit|i\.e\.) \s (?P<duration>\d+) \s+ (night|nuit)\(s\)
      .+?
      (?P<roomType>(Chambre|Room) \s (pour|for) \s .+?) \n\s+
      (?P<sub>.+?) # all the nights for that stay
