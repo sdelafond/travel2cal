@@ -14,22 +14,22 @@ class Accor(Stay):
   # split *and* search using that same regex.
   MAIN_REGEX_STR = r'''
      ((Num..?ro \s de \s r..?servation|Reservation \s number) \s+ : \s+ (?P<reference>[^\s]+)
-     .+? (Conservez|retain) .+?
-     \s\s \[\d\]ibis \s (?P<hotelName>[^\n]+) .+?
+     .+? (Conservez|retain|Keep) .+?
+     \s\s \[\d\](?P<hotelName>(ibis|all \s seasons) \s ([^\n]+)) .+?
      T..?l \s : \s (?P<phone>[^\s]+) \s*
-     (?P<address>.+?) \s - \s (?P<zipCode>\d+) \s (\[.*? \n\s*)? (?P<city>[^\[\n]+)
+     (?P<address>.+?) \s - \s (?P<zipCode>\d+) \s+ (\[.*? \n\s*)? (?P<city>[^\[\n]+)
      .+?
      (Du|du|from) \s (?P<startDate>[0-9/]+) \s (au|to) \s (?P<endDate>[0-9/]+) \s? , .+? (soit|i\.e\.) \s (?P<duration>\d+) \s+ (night|nuit)\(s\)
      .+?
-     (?P<roomType>(Chambre|Room) \s (pour|for) \s .+?) \n\s+
+     (?P<roomType>(Chambre|Room) \s (pour|for|with) \s .+?) \n\s+
      (?P<sub>.+?) # all the nights for that stay
-     .+?
      (Montant \s total|Total \s booking \s price)
      .+?
      (Montant \s Total \s TTC|Total \s amount \s including \s tax) \s+ (?P<totalPrice>[\d\.]+ \s EUR) \n
-     (?:.+?Montant \s pr..?pay..? \s+ (?P<prePaid>[\d\.]+ \s EUR) \n)?
+     (?:.+?(Montant \s pr..?pay..?|Amount \s prepaid) \s+ (?P<prePaid>[\d\.]+ \s EUR) \n)?
      .+?
-     (Important|IMPORTANT))'''
+     (Important|IMPORTANT)
+     )'''
 
   SUB_REGEX_STR = r''' \w '''
 
