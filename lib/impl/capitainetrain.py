@@ -16,7 +16,7 @@ class Capitainetrain(Trip):
     (Vo(?:tre)?s? \s billets? \s command.s?
     \s+ .+?
     \s+ de \s la \s commande \s est \s (?P<price>.+?)\.
-    \s+ .+? Num.ro \s de \s dossier \s : \s (?P<reservationCode>[^.]+)
+    \s+ .+? R.f.rence \s : \s (?P<reservationCode>[^.]+)
     \s / \s
     (?P<reservationName>\w+)
     (?P<sub>.+?) # all the legs for that trip
@@ -24,17 +24,18 @@ class Capitainetrain(Trip):
     )'''
 
   SUB_REGEX_STR = r'''
-    \d+\. \s (?P<from>.+?) \s .+?> \s (?P<to>.+?)
+    (Aller|Retour) .+?
     \s+ -+ \s+
-    D.part \s (?P<startDate>.+?),
+    (?P<startDate>.+?) \s :
     .+?
-    \* \s (?P<startTime>[\d:]+) \s : \s
+    . \s (?P<startTime>[\dh]+) \s (?P<from>.+?) \n
     .+?
-    \* \s (?P<endTime>[\d:]+) \s : \s
+    . \s (?P<endTime>[\dh]+) \s (?P<to>.+?) \n
     .+?
-    \* \s (?P<transportType>.+?) \s SNCF \s n. \s (?P<transportId>\d+)
-    \s+
-    \* \s Voiture \s (?P<transportSection>\d+), \s place \s (?P<seat>\d+)
+    . \s (?P<transportType>\w+) \s (?P<transportId>\d+) \n
+    .+?
+    . Passager \s : .+?
+    . \s Voiture \s (?P<transportSection>\d+), \s place \s (?P<seat>\d+)
     \s
     '''
 
