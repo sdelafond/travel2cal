@@ -16,12 +16,12 @@ class Accor(Stay):
      ((Num..?ro \s de \s r..?servation|Reservation \s number) \s+ : \s+ (?P<reference>[^\s]+)
      .+? (Conservez|retain|Keep) .+?
      \s\s \[\d\](?P<hotelName>(ibis|all \s seasons) \s ([^\n]+)) .+?
-     T..?l \s : \s (?P<phone>[^\s]+) \s*
-     (?P<address>.+?) \s - \s (?P<zipCode>\d+) \s+ (\[.*? \n\s*)? (?P<city>[^\[\n]+)
+     T..?l \s : \s (?P<phone>[^\s]+) .+ \'\' \s+
+     (?P<address>.+?) (?P<zipCode>\d{5}) \s+ (?P<city>[^\n]+?) \s\s
      .+?
      (Du|du|from) \s (?P<startDate>[0-9/]+) \s (au|to) \s (?P<endDate>[0-9/]+) \s? , .+? (soit|i\.e\.) \s (?P<duration>\d+) \s+ (night|nuit)\(s\)
      .+?
-     (?P<roomType>(Chambre|Room) \s (pour|for|with) \s .+?) \n\s+
+     (?P<roomType>(Chambre|Room) \s (standard|pour|for|with) \s .+?) \n\s+
      (?P<sub>.+?) # all the nights for that stay
      (Montant \s total|Total \s booking \s price)
      .+?
