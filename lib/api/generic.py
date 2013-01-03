@@ -12,7 +12,10 @@ LOCALES = output.split('\n')
 def normalizeDict(d, keys):
   for k in keys:
     if not k in d or not d[k]: # create missing keys
-      d[k] = ""
+      if k in ('prePaid', 'fee', 'totalPrice'):
+        d[k] = "0"
+      else:
+        d[k] = ""
   for k in ('startTime', 'endTime'):
     if k in d:
       d[k] = d[k].replace('h', ':') # needed by gcal
