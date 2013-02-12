@@ -24,7 +24,7 @@ class Capitainetrain(Trip):
     )'''
 
   SUB_REGEX_STR = r'''
-    (Aller|Retour) .+?
+    (Aller|Retour|[A-Z]) .+?
     \s+ --+ \s+
     (?P<startDate>.+?) \s :
     .+?
