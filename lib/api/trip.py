@@ -19,7 +19,7 @@ class Leg(Sub):
     d['What'] = "%(transportType)s %(from)s - %(to)s"
     d['When'] = "on %(startDate)s %(startTime)s - %(endTime)s"
     d['Where'] = "%(from)s -> %(to)s"
-    d['Description'] = "%(reservationCode)s %(reservationName)s ; %(transportType)s %(transportId)s ; Wagon %(transportSection)s Seat %(seat)s (%(seatType)s) ; %(class)s - %(priceClass)s ; %(price)s (%(cityFrom)s -> %(cityTo)s %(roundTrip)s)"
+    d['Description'] = "Car %(transportSection)s Seat %(seat)s (%(seatType)s) ; %(reservationCode)s %(reservationName)s ; %(transportType)s %(transportId)s ; %(class)s - %(priceClass)s ; %(price)s (%(cityFrom)s -> %(cityTo)s %(roundTrip)s)"
     return self._format(d)
 
 class Trip(Main):
