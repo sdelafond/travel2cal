@@ -24,7 +24,7 @@ class Accor(Stay):
      (?P<roomType>(Chambre|Room|Suite) \s .+?) \n\s+
      (?P<sub>.+?) # all the nights for that stay
      # (Montant \s Total|Total \s booking \s price)
-     .+?
+     #     .+?
      (Montant \s Total|Total \s amount|Total \s booking) \s+ .*? (?P<totalPrice>[\d\.]+ \s EUR) \n
      (?:.+?(Montant \s pr..?pay..?|Amount \s prepaid) \s+ (?P<prePaid>[\d\.]+ \s EUR) \n)?
      .+?
