@@ -34,8 +34,8 @@ class Capitainetrain(Trip):
     .+?
     . \s (?P<transportType>\w+) \s (?P<transportId>\d+) \n
     .+?
-    . .*? (Passager|passenger) \s : .+?
-    (. \s Voiture \s (?P<transportSection>\d+), \s place \s (?P<seat>\d+))?
+    . .*? (Passager|passenger) \s : [^\n]+ \n
+    (.+? . \s Voiture \s (?P<transportSection>\d+), \s place \s (?P<seat>\d+))?
     \s
     '''
 
