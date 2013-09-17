@@ -16,7 +16,7 @@ class Leg(Sub):
 
   def gcal(self):
     d = {}
-    d['What'] = "%(transportType)s %(from)s - %(to)s"
+    d['What'] = "%(transportType)s %(from)s - %(to)s | c%(transportSection)ss%(seat)s"
     d['When'] = "on %(startDate)s %(startTime)s - %(endTime)s"
     d['Where'] = "%(from)s -> %(to)s"
     d['Description'] = "Car %(transportSection)s Seat %(seat)s (%(seatType)s) ; %(reservationCode)s %(reservationName)s ; %(transportType)s %(transportId)s ; %(class)s - %(priceClass)s ; %(price)s (%(cityFrom)s -> %(cityTo)s %(roundTrip)s)"
