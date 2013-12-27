@@ -15,11 +15,12 @@ class Capitainetrain(Trip):
   MAIN_REGEX_STR = r'''
     (Vo(?:tre)?s? \s billets? \s command.s?
     \s+ .+?
-    \s+ de \s la \s commande \s est \s (?P<price>.+?)\.
     \s+ .+? R.f.rence \s : \s (?P<reservationCode>[^.]+)
     \s / \s
     (?P<reservationName>\w+)
     (?P<sub>.+?) # all the legs for that trip
+    Prix \s : \s (?P<price>.+?)\n
+    .+?
     Conditions
     )'''
 
