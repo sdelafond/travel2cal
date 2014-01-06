@@ -18,8 +18,7 @@ class Capitainetrain(Trip):
     \s+ .+? R.f.rence \s : \s (?P<reservationCode>[^.]+)
     \s / \s
     (?P<reservationName>\w+)
-    (?P<sub>.+?) # all the legs for that trip
-    Prix \s : \s (?P<price>.+?)\n
+    (?P<sub>.+) # all the legs for that trip
     .+?
     Conditions
     )'''
@@ -37,7 +36,8 @@ class Capitainetrain(Trip):
     .+?
     . .*? (Passager|passenger) \s : [^\n]+ \n
     (.+? . \s Voiture \s (?P<transportSection>\d+), \s place \s (?P<seat>\d+))?
-    \s
+    .+?
+    Prix \s : \s (?P<price>.+?)\n
     '''
 
   TIMESTAMP_FORMAT = '%A %d %B %Y'
