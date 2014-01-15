@@ -57,7 +57,7 @@ class Sub:
 
   def _format(self, d):
     l = [ "%s:%s" % (k, v % self.di) for k,v in d.iteritems() ]
-    return ". ".join(l)
+    return " ".join(l)
 
   def __cmp__(self, o):
     return (isinstance(o, self.__class__) and cmp(self.di, o.di))
