@@ -19,6 +19,9 @@ parser = optparse.OptionParser()
 parser.add_option("-s", "--simulate", dest="simulate",
                   action="store_true", default=False,
                   help="simulation mode")
+parser.add_option("-q", "--quiet", dest="quiet",
+                  action="store_true", default=False,
+                  help="simulation mode")
 parser.add_option("-c", "--config-file", dest="configFile",
                   default=DEFAULT_CONFIG_FILE,
                   help="config-file location")
@@ -57,32 +60,32 @@ for part in msg.walk():
                                stdout=subprocess.PIPE).communicate()[0]
   except ConfigParser.NoOptionError:
     # no pre-processing for this MIME type
-    if options.simulate:
+    if options.simulate and not options.quiet:
       print "no preprocessing"
     pass
 
   charset =  part.get_content_charset() or part.get_charset() or msg.get_content_charset()
 
   if charset:
-    if options.simulate:
+    if options.simulate and not options.quiet:
       print "charset found: %s" % charset
     s = payload.decode(charset)
   else:
     for charset in [ 'ascii', 'iso-8859-15', 'utf-8' ]:
       try:
-        if options.simulate:
+        if options.simulate and not options.quiet:
           print "now trying charset: %s" % charset
         s = payload.decode(charset)
       except:
         pass
   if s:
-    if options.simulate:
+    if options.simulate and not options.quiet:
       print "decoding ok"
     break # stop on 1st payload successfully decoded
 
 s = s.replace('\r\n', '\n')
 
-if options.simulate:
+if options.simulate and not options.quiet:
   print s
 
 if options.type:
@@ -92,18 +95,19 @@ else:
 
 rc = -1
 for myType in [ getattr(lib.impl, t.capitalize()) for t in types ]:
-  if options.simulate:
+  if options.simulate and not options.quiet:
     print "trying type: %s" % myType
-  for trip in myType.getFactory(myType).parse(s, options.simulate):
+  for trip in myType.getFactory(myType).parse(s, options.simulate and not options.quiet):
     for exp in trip.export(options.format):
       if rc < 0:
         rc = 0
       command = "google --cal='^%s$' calendar add '%s'" % (calendar, exp)
 
-      if options.simulate:
+      if options.simulate and not options.quiet:
         print "Would run:\n\t %s" % command
       else:
-        print "Running:\n\t %s" % command
+        if not options.quiet:
+          print "Running:\n\t %s" % command
         p = subprocess.Popen(command, shell=True)
         rc += os.waitpid(p.pid, 0)[1]
 
