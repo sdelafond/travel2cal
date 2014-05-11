@@ -15,7 +15,7 @@ class Accor(Stay):
   MAIN_REGEX_STR = r'''
      ((Num..?ro \s de \s r..?servation|Reservation \s number) \s+ : \s+ (?P<reference>[^\s]+)
      .+? (Conservez|retain|Keep) .+?
-     \s\s \[\d\](?P<hotelName>(ibis|all \s seasons|Mercure|Suite \s Novotel) \s ([^\n]+)) .+?
+     \s\s \[\d\](?P<hotelName>(ibis|all \s seasons|Mercure|(Suite \s )?Novotel) \s ([^\n]+)) .+?
      T..?l \s : \s (?P<phone>[^\s]+) .+ \'\' \s+
      (?P<address>.+?) ([\s\-]* \[.*?)? (?P<zipCode>\d{5}) \s+ (?P<city>[^\n]+?) ([\s\-]* \[.*?)? \s\s
      .+?
