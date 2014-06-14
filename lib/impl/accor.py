@@ -26,7 +26,8 @@ class Accor(Stay):
      # (Montant \s Total|Total \s booking \s price)
      #     .+?
      (Montant \s .otal|Total \s amount|Total \s booking) \s+ .*? (?P<totalPrice>[\d\.]+ \s EUR) \n
-     (?:.+?(Montant \s pr..?pay..?|Amount \s prepaid) \s+ (?P<prePaid>[\d\.]+ \s EUR) \n)?
+     .+? \n \s*
+     ((Le \s montant \s pr..?pay..? \s est \s de|[Aa]mount \s prepaid) \s+ (?P<prePaid>[\d\.]+) \s EUR)?
      .+?
      (Important|IMPORTANT)
      )'''
