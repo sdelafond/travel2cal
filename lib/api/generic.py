@@ -118,7 +118,7 @@ class MainFactory:
           print main.di
         for m2 in self.subRegex.finditer(main.di['sub']):
           main.addSub(m2.groupdict())
-          if simulate:
+          if simulate and m2.groupdict():
             print "match for subregex"
             print m2.groupdict()
         mains.append(main)
