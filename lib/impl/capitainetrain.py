@@ -20,14 +20,13 @@ class Capitainetrain(Trip):
     (?P<reservationName>\w+)
     (?P<sub>.+) # all the legs for that trip
     .+?
+    Prix \s : \s (?P<price>.+?)\n
     Conditions
     )'''
 
   SUB_REGEX_STR = r'''
-    (Aller|Retour|[A-Z]) .+?
-    \s+ --+ \s+
-    (?P<startDate>.+?) \s :
-    .+?
+    --+ \s+
+    ((?P<startDate>.+?) \s : .+?)?
     . \s (?P<startTime>[\dh]+) \s (?P<from>.+?) \n
     .+?
     . \s (?P<endTime>[\dh]+) \s (?P<to>.+?) \n
@@ -36,8 +35,6 @@ class Capitainetrain(Trip):
     .+?
     . .*? (Passager|passenger) \s : [^\n]+ \n
     (.+? . \s Voiture \s (?P<transportSection>\d+), \s place \s (?P<seat>\d+))?
-    .+?
-    Prix \s : \s (?P<price>.+?)\n
     '''
 
   TIMESTAMP_FORMAT = '%A %d %B %Y'

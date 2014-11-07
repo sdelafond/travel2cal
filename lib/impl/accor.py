@@ -32,7 +32,7 @@ class Accor(Stay):
      (Important|IMPORTANT)
      )'''
 
-  SUB_REGEX_STR = r''' \w '''
+  SUB_REGEX_STR = r''' .+ '''
 
   TIMESTAMP_FORMAT = '%d/%m/%Y'
   TIMESTAMP_LOCALE = 'fr_FR'

@@ -116,10 +116,16 @@ class MainFactory:
         if simulate:
           print "match for main regex"
           print main.di
+        previousStartDate = None
         for m2 in self.subRegex.finditer(main.di['sub']):
-          main.addSub(m2.groupdict())
-          if simulate and m2.groupdict():
+          d = m2.groupdict()
+          if d and not d['startDate'] and previousStartDate:
+            d['startDate'] = previousStartDate
+          if d:
+            previousStartDate = d['startDate']
+          main.addSub(d)
+          if simulate and d:
             print "match for subregex"
-            print m2.groupdict()
+            print d
         mains.append(main)
     return mains
