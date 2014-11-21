@@ -42,6 +42,7 @@ config.read(options.configFile)
 calendar = options.name
 if not calendar:
   calendar = config.get('gcal', 'name')
+command = config.get('gcal', 'command')
 
 msg = email.message_from_string(sys.stdin.read())
 for part in msg.walk():
@@ -101,14 +102,14 @@ for myType in [ getattr(lib.impl, t.capitalize()) for t in types ]:
     for exp in trip.export(options.format):
       if rc < 0:
         rc = 0
-      command = "google --cal='^%s$' calendar add '%s'" % (calendar, exp)
+      cmd = "%s --cal='^%s$' quick '%s'" % (command, calendar, exp)
 
       if options.simulate and not options.quiet:
-        print "Would run:\n\t %s" % command
+        print "Would run:\n\t %s" % cmd
       else:
         if not options.quiet:
-          print "Running:\n\t %s" % command
-        p = subprocess.Popen(command, shell=True)
+          print "Running:\n\t %s" % cmd
+        p = subprocess.Popen(cmd, shell=True)
         rc += os.waitpid(p.pid, 0)[1]
 
 sys.exit(rc)
