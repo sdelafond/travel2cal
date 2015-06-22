@@ -17,7 +17,8 @@ class Accor(Stay):
      .+? (Conservez|retain|Keep) .+?
      \s\s \[\d\](?P<hotelName>(H.tel\s)? (ibis|all \s seasons|Mercure|(Suite \s )?Novotel) \s ([^\n]+)) .+?
      T..?l \s : \s (?P<phone>[^\s]+) .+? (\'\')? \s+
-     (?P<address>[\d/]+[\s,].+?) ([\s\-]* \[.*?)? (?P<zipCode>\d{5}) \s+ (?P<city>[^\n]+?) ([\s\-]* \[.*?)? \s\s
+     (?P<address>([\d/]+[\s,]|ROUTE).+?) ([\s\-]* \[.*?)? (?P<zipCode>\d{5}) \s+ (?P<city>[\w\s\-]+?)
+     [\s\-]* (\[.*? \s\s|\s+ GPS\s :[A-Z]|Chambre)
      .+?
      (Du|du|from) \s (?P<startDate>[0-9/]+) \s (au|to) \s (?P<endDate>[0-9/]+) \s? , .+? (soit|i\.e\.) \s (?P<duration>\d+) \s+ (night|nuit)\(s\)
      .+?
