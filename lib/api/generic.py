@@ -49,7 +49,11 @@ class Sub:
         if not di.get(key):
           continue
         locale.setlocale(locale.LC_ALL, loc)
-        ts = datetime.strptime(di[key].encode('utf-8'), self.cls.TIMESTAMP_FORMAT)
+        try:
+          ts = datetime.strptime(di[key].encode('utf-8'), self.cls.TIMESTAMP_FORMAT)
+        except:
+          print "failed to strptime for key %s (value '%s')" % (key, di.get(key))
+          raise
         locale.setlocale(locale.LC_ALL, oldLocale)
         di[key] = datetime.strftime(ts, '%d %b %Y')
 
