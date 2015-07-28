@@ -26,7 +26,7 @@ class Capitainetrain(Trip):
 
   SUB_REGEX_STR = r'''
     --+ \s+
-    ((?P<startDate>.+?) \s : .+?)?
+    ((?P<startDate>[^:]+?) \s : \s+)?
     . \s (?P<startTime>[\dh]+) \s (?P<from>.+?) \n
     .+?
     . \s (?P<endTime>[\dh]+) \s (?P<to>.+?) \n
